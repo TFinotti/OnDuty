@@ -1,0 +1,34 @@
+﻿@model List<Service>
+@{
+    ViewData["Title"] = "List Of Bookings";
+}
+
+@* Show to the customer the list of all services he/she requested *@
+
+<h2>List of your bookings</h2>
+
+@if (!Model.Any())
+{
+    <p>There is no service booked, find now your next provider!</p>
+    <a asp-action="SelectCategory">Search Provider</a>
+}
+else
+{
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#Accepted">Accepted</a></li>
+        <li><a data-toggle="tab" href="#Pending">Pending</a></li>
+        <li><a data-toggle="tab" href="#Completed">Completed</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="Accepted" class="tab-pane fade in active">
+            <partial name="Partials/AcceptedBookings" for="@Model" />
+        </div>
+        <div id="Pending" class="tab-pane fade">
+            <partial name="Partials/PendingBookings" for="@Model" />
+        </div>
+        <div id="Completed" class="tab-pane fade">
+            <partial name="Partials/CompletedBookings" for="@Model" />
+        </div>
+    </div>
+}

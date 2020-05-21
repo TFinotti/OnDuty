@@ -1,0 +1,125 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
+for details on configuring this project to bundle and minify static web assets. */
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Carousel */
+.carousel-caption p {
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+/* Make .svg files in the carousel display properly in older browsers */
+.carousel-inner .item img[src$=".svg"] {
+    width: 100%;
+}
+
+/* QR code generator */
+#qrCode {
+    margin: 15px;
+}
+
+/* Hide/rearrange for smaller screens */
+@media screen and (max-width: 767px) {
+    /* Hide captions */
+    .carousel-caption {
+        display: none;
+    }
+}
+
+#LogoImg {
+    display: inline;
+}
+
+.p-banner {
+    background: rgba(128, 128, 128, 0.7);
+}
+
+.btn-text-black {
+    color: black;
+}
+
+.container {
+    padding: 15px;
+}
+
+.navbar-nav {
+    margin-top: 13px;
+}
+
+.body-content {
+    margin-top: 75px;
+}
+
+.list-group-item:hover {
+    background-color: #f57135;
+    color: white;
+}
+
+.list-group-item a {
+    color: black;
+}
+
+    .list-group-item a:hover {
+        text-decoration: none;
+    }
+
+#navigationUl .btn-link:hover {
+    background-color: #f57135;
+}
+
+li:hover {
+    color: white;
+}
+
+li {
+    list-style-image: none;
+}
+
+div.tab-pane.fade.active .list-group-item:first-child {
+    border-top: 0px;
+}
+
+[id*="Provider_"] {
+    position: absolute;
+    left: -100px;
+    display: none;
+}
+
+[for*="Provider_"] a {
+    color: #aab8c2;
+    cursor: pointer;
+    font-size: 2em;
+    align-self: center;
+    transition: color 0.2s ease-in-out;
+}
+
+[for*="Provider_"]:hover a {
+    color: grey;
+}
+
+[for*="Provider_"]::selection a {
+    color: none;
+    background: transparent;
+}
+
+[id*="Provider_"]:checked ~ label a {
+    color: #e2264d;
+    will-change: font-size;
+    animation: heart 1s cubic-bezier(.17, .89, .32, 1.49);
+}
+.providerHeart {
+    float: right;
+    color: #e2264d;
+    position: relative;
+    top: -20px;
+}

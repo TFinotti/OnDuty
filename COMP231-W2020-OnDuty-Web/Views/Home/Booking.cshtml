@@ -1,0 +1,22 @@
+﻿@model COMP231_W2020_OnDuty_Web.Models.Service
+@{
+    ViewData["Title"] = "Booking a Service";
+}
+
+@* In this View the user can provide extra details about the Service *@
+
+<h2>Service requested!</h2>
+<h3>Provide more details about this service:</h3>
+<form>
+    <div class="form-group">
+        <label asp-for="@Model.Details"></label>
+        <textarea asp-for="@Model.Details" class="form-control" rows="7" style="width: 600px; margin-bottom: 15px"></textarea>
+        <button class="btn btn-success" asp-action="SaveBookingDetails" asp-route-Id="@Model.Id" style="margin-left: 180px">Confirm Request</button>
+        <button class="btn btn-warning" asp-action="Cancel" asp-route-Id="@Model.Id">Cancel Request</button>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.DateTime"></label><br />
+        <input asp-for="@Model.DateTime" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+        <h6>(MM-DD-YYYY HH:MM AM/PM)</h6>
+    </div>
+</form>

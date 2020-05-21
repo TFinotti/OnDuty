@@ -1,0 +1,155 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Profile";
+}
+<style>
+
+    /* Set the size of the div element that contains the map */
+    #map {
+        height: 400px;
+        width: 600px;
+    }
+</style>
+
+<h4>@ViewData["Title"]</h4>
+<div class="row">
+    <div class="col-md-6">
+        <form id="profile-form" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Username"></label>
+                <input asp-for="Username" class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Name"></label>
+                <input asp-for="Input.Name" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Latitude"></label>
+                <input asp-for="Input.Latitude" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Longitude"></label><br />
+                <input asp-for="Input.Longitude" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Address"></label>
+                <input asp-for="Input.Address" class="form-control" />
+            </div>
+
+            <div id="map"></div>
+            <div id="msg"></div>
+
+            <div class="form-group">
+                <br /><label asp-for="Input.IsProvider"></label>
+                <input asp-for="Input.IsProvider" class="checkbox-inline" id="IsProviderCheckBox" />
+            </div>
+            <div class="form-group" id="CategoryDiv" style="display: none">
+                <label asp-for="Input.Category"></label><br />
+                <select asp-for="Input.Category" asp-items="Model.Categories" class="form-control">
+                    <option value="">Select a category</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Email"></label>
+                @if (Model.IsEmailConfirmed)
+                {
+                    <div class="input-group">
+                        <input asp-for="Input.Email" class="form-control" />
+                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                    </div>
+                }
+                else
+                {
+                    <input asp-for="Input.Email" class="form-control" />
+                    <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Send verification email</button>
+                }
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.PhoneNumber"></label>
+                <input asp-for="Input.PhoneNumber" class="form-control" />
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-default">Save</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // script to automatically show and hide the "CategoryDiv" according to "IsProviderCheckBox" checked condition
+    function checkIsProvider() {
+        var IsProvider = document.getElementById("IsProviderCheckBox");
+        if (IsProvider.checked) {
+            document.getElementById("CategoryDiv").style.display = "";
+        } else {
+            document.getElementById("CategoryDiv").style.display = "none";
+            document.querySelector("#CategoryDiv select").options[0].selected = true;
+        }
+    }
+
+    window.addEventListener("load", checkIsProvider, false);
+    document.getElementById("IsProviderCheckBox").addEventListener("change", checkIsProvider, false);
+</script>
+
+<script type="text/javascript">
+    var Lat = document.getElementById("Input_Latitude");
+    var Long = document.getElementById("Input_Longitude");
+    var map;
+
+    //getLocation();
+    //initMap();
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
+        }
+        else { Lat.innerHTML = "Not supported."; }
+    }
+    function showPosition(position) {
+        Lat.value = position.coords.latitude;
+        Long.value = position.coords.longitude;
+        initMap();
+    }
+
+    function showError(error) {
+        if (error.code == 1) {
+            Lat.innerHTML = "User denied Geolocation."
+        }
+        else if (error.code == 2) {
+            Lat.innerHTML = "Location unavailable."
+        }
+        else if (error.code == 3) {
+            Lat.innerHTML = "Location timed out."
+        }
+        else {
+            Lat.innerHTML = "An unknown error occurred."
+        }
+    }
+
+    function initMap() {
+        //console.log(Lat.value);
+        //console.log(Long.value);
+        const center = { lat: parseFloat(Lat.value), lng: parseFloat(Long.value) };
+
+        const options = { zoom: 15, scaleControl: true, center: center };
+        map = new google.maps.Map(
+            document.getElementById('map'), options);
+
+        // Locations of landmarks
+        const pointMarker = { lat: parseFloat(Lat.value), lng: parseFloat(Long.value) };
+
+        // The markers for USER
+        var mk1 = new google.maps.Marker({ position: pointMarker, map: map });
+    }
+
+</script>
+<!--Load the API from the specified URL -- remember to replace YOUR_API_KEY-->
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgl4Echpw8mJbVX7zIXlYaRjKNcN0XI3Q&callback=getLocation">
+</script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

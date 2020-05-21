@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COMP231-W2020-OnDuty", "COMP231-W2020-OnDuty\COMP231-W2020-OnDuty.csproj", "{94D2D032-6C67-488B-8817-D2222DBB32F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COMP231-W2020-OnDuty-Web", "COMP231-W2020-OnDuty-Web\COMP231-W2020-OnDuty-Web.csproj", "{675703AB-5B1F-40C5-AF1A-EE9038568AB4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{94D2D032-6C67-488B-8817-D2222DBB32F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94D2D032-6C67-488B-8817-D2222DBB32F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94D2D032-6C67-488B-8817-D2222DBB32F8}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{94D2D032-6C67-488B-8817-D2222DBB32F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94D2D032-6C67-488B-8817-D2222DBB32F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94D2D032-6C67-488B-8817-D2222DBB32F8}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{675703AB-5B1F-40C5-AF1A-EE9038568AB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{675703AB-5B1F-40C5-AF1A-EE9038568AB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{675703AB-5B1F-40C5-AF1A-EE9038568AB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{675703AB-5B1F-40C5-AF1A-EE9038568AB4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B9DDE3E4-C7E4-4DF8-A50D-622C2FDB6DEB}
+	EndGlobalSection
+EndGlobal

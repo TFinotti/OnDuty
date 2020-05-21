@@ -1,0 +1,24 @@
+﻿@model Category
+@{
+	ViewBag.Title = "Select Category";
+}
+
+@* In this View the customer can select in which category to look for providers *@
+
+<div class="text-center">
+	<h3>Please select the category of service you want to book</h3>
+	<form class="p-a-1" asp-controller="Home" asp-action="ListResult" method="post">
+		@if (Model != null)
+		{
+			<input type="hidden" asp-for="Name" value="@Model.Name" />
+		}
+		<div class="form-group">
+			<select asp-for="Name" multiple
+					class="form-control center-block"
+					asp-items="@(new SelectList(ViewBag.ListofCategory,"Name","Name"))"
+					style="width: 300px"></select>
+		</div>
+
+		<button type="submit" class="btn btn-warning btn-lg">Search for Providers</button>
+	</form>
+</div>

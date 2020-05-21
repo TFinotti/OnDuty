@@ -1,0 +1,17 @@
+﻿@inject SignInManager<COMP231_W2020_OnDuty_Web.Models.User> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+<ul id="navigationUl" class="list-group">
+    <li class="list-group-item"><a asp-page="./Index">Profile</a></li>
+    <li class="list-group-item"><a id="change-password" asp-page="./ChangePassword">Password</a></li>
+    @if (hasExternalLogins)
+    {
+        <li class="list-group-item"><a id="external-login" asp-page="./ExternalLogins">External logins</a></li>
+    }
+    <li class="list-group-item"><a asp-page="./TwoFactorAuthentication">Two-factor authentication</a></li>
+    <li class="list-group-item"><a asp-page="./PersonalData">Personal data</a></li>
+    <li class="list-group-item"><a asp-controller="Home" asp-action="ListOfBookings">View list of bookings</a></li>
+    <li class="list-group-item"><a asp-controller="Home" asp-action="RequestedServices">View list of requested services (for providers)</a></li>
+    <li class="list-group-item"><a asp-controller="Home" asp-action="ProvidersPreviouslyContracted">View list of favorite and previously contracted providers</a></li>
+</ul>

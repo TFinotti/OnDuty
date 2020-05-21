@@ -1,0 +1,36 @@
+﻿@model List<Service>
+@{ bool populated = false;}
+
+@foreach (var service in Model)
+{
+    if (service.Status == "Completed")
+    {
+        <li class="list-group-item">
+            <div class="card">
+                <h5 class="card-header">@service.Category</h5>
+                <div class="card-body">
+                    <h5 class="card-title"><strong>Provider: </strong>@service.Provider</h5>
+                    <h5 class="card-title"><strong>Date: </strong>@service.DateTime.ToString("MMM-dd-yyyy HH:mm")</h5>
+                    <h5 class="card-title"><strong>Details: </strong>@service.Details</h5>
+                    <h5 class="card-title"><strong>Status: </strong>@service.Status</h5>
+                    @if (service.Status == "Pending")
+                    {
+                        <p>Waiting provider acceptence of the service</p>
+                    }
+                    else if (service.Status == "Accepted")
+                    {
+                        <p>Provider is on his way</p>
+                    }
+                    <a class="btn btn-warning" asp-action="Cancel" asp-route-Id="@service.Id" asp-route-ViewRequestedServices="false">Cancel this service</a>
+                </div>
+            </div>
+        </li>
+        populated = true;
+    }
+}
+
+@if (!populated)
+{
+    <br />
+    <h4>There is no service with this status</h4>
+}

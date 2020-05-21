@@ -1,0 +1,34 @@
+﻿@model List<Service>
+@{
+    ViewData["Title"] = "List Of Requested Services";
+}
+
+@* Show to the provider the list of services requested by customers *@
+
+<h2>List of Requested Services</h2>
+
+@if (Model == null)
+{
+    <p>This page is restricted to Service Providers. Access your configurations to set your profile as Provider.</p>
+}
+else if (!Model.Any())
+{
+    <p>There is no services for you to attend.</p>
+}
+else
+{
+    @foreach (var service in Model)
+    {
+        <li class="list-group-item">
+            <div class="card">
+                <h5 class="card-header">@service.Category</h5>
+                <div class="card-body">
+                    <h5 class="card-title"><strong>Customer: </strong>@service.Customer.Name</h5>
+                    <h5 class="card-title"><strong>Details: </strong>@service.Details</h5>
+                    <a class="btn btn-warning" asp-action="Cancel" asp-route-Id="@service.Id" asp-route-ViewRequestedServices="true">Cancel this service</a>
+                    <a class="btn btn-warning" asp-action="Accept" asp-route-Id="@service.Id">Accept this service</a>
+                </div>
+            </div>
+        </li>
+    }
+}

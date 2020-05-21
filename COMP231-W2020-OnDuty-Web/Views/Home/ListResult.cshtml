@@ -1,0 +1,178 @@
+﻿@model List<User>
+@{
+    ViewData["Title"] = "Select Provider";
+}
+
+@* Show the available providers for the specified category *@
+
+<h2>Select your provider</h2>
+@* THIS STYLE MUST BE MOVED LATER TO THE CSS FILE *@
+<style>
+    /* Set the size of the div element that contains the map */
+    #map {
+        height: 400px;
+        width: 600px;
+    }
+    ul#evaluations li {
+        display: inline;
+        text-decoration: none;
+        padding-right: 0;
+    }
+    #score{
+    }
+    #reviews{
+        padding-left: 25%;
+    }
+</style>
+@* END OF STYLE *@
+<!--The div elements for the map and message -->
+<div id="map" style="float: right; z-index: 5"></div>
+<div id="msg"></div>
+<br/>
+<label for="onlyFavorites">Show only favorite providers&nbsp;</label>
+<input type="checkbox" id="onlyFavorites" />
+<br/><br/>
+<ul class="list-group list-group-flush" style="width: 300px">
+
+    @foreach (User provider in Model)
+    {
+    <li class="list-group-item">
+        <div class="card">
+            <h3 class="providerHeart">
+                @foreach (var fav in ViewBag.Favorites)
+                {
+                    if (fav == provider.UserName)
+                    {
+                        <span>❤</span>
+                    }
+                }
+            </h3>
+            <h4 class="card-title">@provider.Name</h4>
+            <div class="card-body">
+                <h5 class="card-title">@provider.Category</h5>
+                <input name="coordinate" id="ProvLatitude" asp-for="@provider.Latitude" style="display:none" />
+                <input name="coordinate" id="ProvLongitude" asp-for="@provider.Longitude" style="display:none" />
+                <h5 class=" card-body" name="distance">Distance: </h5>
+                <h5>Score: @provider.Evaluation</h5>
+                <h5>Reviews: @provider.numberEvaluations</h5>
+                <a class=" btn btn-primary btn-success" asp-action="CreateBooking" asp-route-Name="@provider.Name">Book</a>
+            </div>
+        </div>
+    </li>
+    }
+
+</ul>
+
+<script>
+    // Initialize and add the map
+    var map;
+    var userCoordinates = {
+        Lat: 0.00,
+        Long: 0.00
+    };
+    let providerCoordinatesByName = document.getElementsByName("coordinate");
+    var providerCoordinates = [];
+    var distance = [];
+    var iterator = 0, elementLat, elementLong;
+    var tagDistances = document.getElementsByName("distance");
+    var element2 = providerCoordinatesByName[0].value;
+
+    //Here it gets the user's Navigator location if supported
+    //Called by the Google Maps API assyncronously
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(storePosition, showError);
+        }
+        else { showError(2); }
+    }
+    //When supported by the Navigator, store user's browser location
+    function storePosition(position) {
+        userCoordinates.Lat = position.coords.latitude;
+        userCoordinates.Long = position.coords.longitude;
+        //console.log("user Latitude: " + userCoordinates.Lat);
+        //console.log("user Longitude: " + userCoordinates.Long);
+        storeProviderLocation();
+    }
+
+    function showError(error) {
+        //missing to implement this method - make a error message appear on the screen
+    }
+
+
+    function storeProviderLocation() {
+        for (let i = 0; i < providerCoordinatesByName.length; i++) {
+            if (i % 2 == 0.0) {
+                elementLat = providerCoordinatesByName[i].value;
+                elementLong = providerCoordinatesByName[i + 1].value;
+                providerCoordinates[iterator] = { lat: elementLat, lng: elementLong };
+                distance[iterator] = calculateDistance(userCoordinates.Lat, userCoordinates.Long, elementLat, elementLong);
+                iterator++;
+            }
+        }
+        insertDistances();
+        initMap();
+    }
+
+    function calculateDistance(userLatitude, userLongitude, providerLatitude, providerLongitude) {
+        var R = 6371.0710; // Radius of the Earth in kilometers
+        //var R = 3958.8; // Radius of the Earth in miles
+        var rlat1 = userLatitude * (Math.PI / 180); // Convert degrees to radians
+        var rlat2 = providerLatitude * (Math.PI / 180); // Convert degrees to radians
+        var difflat = rlat2 - rlat1; // Radian difference (latitudes)
+        var difflon = (providerLongitude - userLongitude) * (Math.PI / 180); // Radian difference (longitudes)
+
+        var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat / 2) * Math.sin(difflat / 2) + Math.cos(rlat1) * Math.cos(rlat2) * Math.sin(difflon / 2) * Math.sin(difflon / 2)));
+        return d;
+    }
+
+    function insertDistances() {
+        for (var i = 0; i < tagDistances.length; i++) {
+            tagDistances[i].innerHTML = "Distance: " + distance[i].toFixed(2) + " km";
+        }
+    }
+
+    //Here it renderizes the Map with the coordinates on the "Map" placeholder
+    function initMap() {
+        const center = { lat: parseFloat(userCoordinates.Lat), lng: parseFloat(userCoordinates.Long) };
+        const options = { zoom: 15, scaleControl: true, center: center };
+
+
+        map = new google.maps.Map(document.getElementById('map'), options);
+
+        // Locations of landmarks
+        const pointMarker = { lat: parseFloat(userCoordinates.Lat), lng: parseFloat(userCoordinates.Long) };
+
+        // The markers for USER
+        var mk1 = new google.maps.Marker({ position: pointMarker, map: map });
+
+        //The markers for providers
+        var providerPointMarker, providerMk;
+        for (let i = 0, element; (element = providerCoordinates[i]); i++) {
+            providerPointMarker = { lat: parseFloat(element.lat), lng: parseFloat(element.lng) };
+            providerMk = new google.maps.Marker({ position: providerPointMarker, map: map });
+        }
+    }
+</script>
+<!--Load the API from the specified URL -- remember to replace YOUR_API_KEY-->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgl4Echpw8mJbVX7zIXlYaRjKNcN0XI3Q&callback=getLocation">
+</script>
+<script>
+    // hide and show providers not favorited
+    function showAndHide() {
+        var providers = document.getElementsByClassName('providerHeart');
+        var onlyFavorites = document.getElementById('onlyFavorites').checked;
+
+        for (provider of providers) {
+            if (provider.childNodes.length < 3) {
+                if (onlyFavorites) {
+                    provider.parentElement.parentElement.style = "display: none;";
+                } else {
+                    provider.parentElement.parentElement.style = "display: ;";
+                }
+            }
+        }
+    }
+
+    document.getElementById('onlyFavorites').addEventListener('change', showAndHide)
+
+</script>
